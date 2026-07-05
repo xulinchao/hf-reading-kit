@@ -1,8 +1,10 @@
 ---
 name: 读书稿 · 水彩手账
-description: HyperFrames 读书稿口播 overlay 层设计系统
+id: reading-watercolor
+description: 口播读书稿 overlay 层 — 水彩纸感、大 serif 字、淡色引导
 canvas: 1448x1086
 aspect: "16:9"
+use_when: 读书稿、长口播、剪映合成字幕
 
 colors:
   paper: "#F5F0E8"
