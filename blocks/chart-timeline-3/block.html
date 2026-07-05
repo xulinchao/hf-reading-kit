@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8" /></head><body><template>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  /* ↓ 调参见 compositions/v2/CONFIG.md */
+  #root {
+    --zone-top: 8%;
+    --zone-h: 48%;
+    --wrap-w: 1140px;
+    --title-size: 40px;
+    --sub-size: 18px;
+    --icon-size: 96px;
+    --num-size: 20px;
+    --label-size: 38px;
+    --years-size: 22px;
+    --track-h: 12px;
+    position: absolute; inset: 0; width: 1448px; height: 1086px;
+    background: transparent; overflow: hidden;
+  }
+  .zone {
+    position: absolute; left: 0; right: 0;
+    top: var(--zone-top); height: var(--zone-h);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wrap {
+    width: var(--wrap-w); padding: 44px 52px 40px; position: relative;
+    background: rgba(252,248,242,0.92); border-radius: 22px;
+    border: 1.5px solid rgba(44,36,32,0.07);
+    box-shadow: 0 20px 56px rgba(44,36,32,0.1), inset 0 1px 0 rgba(255,255,255,0.65);
+    margin: 0 auto;
+  }
+  .wrap::after { content: ''; position: absolute; inset: 14px; border: 1px dashed rgba(107,163,181,0.2);
+    border-radius: 14px; pointer-events: none; }
+  .title { font: 700 var(--title-size)/1.2 "Noto Serif SC", serif; color: #2C2420; text-align: center; margin-bottom: 10px; }
+  .sub { font: 500 var(--sub-size)/1 "Noto Sans SC", sans-serif; letter-spacing: 0.18em; color: rgba(44,36,32,0.4); text-align: center; margin-bottom: 44px; }
+  .track-wrap { position: relative; padding: 0 24px 72px; max-width: 920px; margin: 0 auto; }
+  .track { position: relative; height: var(--track-h); background: rgba(44,36,32,0.1); border-radius: 5px; overflow: hidden; }
+  .fill { position: absolute; left: 0; top: 0; height: 100%; width: 0%;
+    background: linear-gradient(90deg, #6BA3B5, #C4A35A 55%, #8B69B4); border-radius: 5px; }
+  .ticks { position: absolute; left: 0; right: 0; top: calc(var(--track-h) * -1); height: calc(var(--track-h) + 20px); }
+  .tick { position: absolute; top: 0; width: 3px; height: calc(var(--track-h) + 12px); background: rgba(44,36,32,0.15); transform: translateX(-50%); border-radius: 2px; }
+  .tick.on { background: #6BA3B5; height: calc(var(--track-h) + 18px); top: -3px; }
+  .marks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; }
+  .mark { text-align: center; padding: 0 16px; opacity: 0; transform: translateY(14px); display: flex; flex-direction: column; align-items: center; }
+  .icon-wrap {
+    width: var(--icon-size); height: var(--icon-size); margin: 0 auto 16px; border-radius: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(107,163,181,0.12); border: 2px solid rgba(107,163,181,0.25);
+  }
+  .icon-wrap svg { width: calc(var(--icon-size) * 0.48); height: calc(var(--icon-size) * 0.48); }
+  .mark.on .icon-wrap { background: rgba(107,163,181,0.28); border-color: #6BA3B5; }
+  .mark:nth-child(2).on .icon-wrap { background: rgba(196,163,90,0.28); border-color: #C4A35A; }
+  .mark:nth-child(3).on .icon-wrap { background: rgba(139,105,180,0.25); border-color: #8B69B4; }
+  .mark-num { font: 800 var(--num-size)/1 "Noto Sans SC", sans-serif; color: rgba(44,36,32,0.35); margin-bottom: 10px; }
+  .mark.on .mark-num { color: #6BA3B5; }
+  .mark-label { font: 700 var(--label-size)/1.3 "Noto Serif SC", serif; color: rgba(44,36,32,0.45); }
+  .mark.on .mark-label { color: #2C2420; }
+  .mark-years { font: 600 var(--years-size)/1 "Noto Sans SC", sans-serif; color: rgba(44,36,32,0.35); margin-top: 8px; }
+  .mark.on .mark-years { color: #6BA3B5; }
+</style>
+<div id="root" data-composition-id="chart-waves" data-width="1448" data-height="1086" data-start="0" data-duration="6.1">
+  <div class="clip" data-start="0" data-duration="6.1" data-track-index="0">
+    <div class="zone">
+      <div class="wrap">
+        <div class="title">科技平台 · 各花 13 年</div>
+        <div class="sub">INTERNET → SOCIAL → AI</div>
+        <div class="track-wrap">
+          <div class="ticks">
+            <div class="tick" id="chart-waves-tk0" style="left:0%"></div>
+            <div class="tick" id="chart-waves-tk1" style="left:33.33%"></div>
+            <div class="tick" id="chart-waves-tk2" style="left:66.66%"></div>
+            <div class="tick" id="chart-waves-tk3" style="left:100%"></div>
+          </div>
+          <div class="track"><div class="fill" id="chart-waves-fill"></div></div>
+          <div class="marks">
+            <div class="mark" id="chart-waves-m1">
+              <div class="mark-num">01</div>
+              <div class="icon-wrap"><svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="10" stroke="#6BA3B5" stroke-width="2"/><path d="M8 14h12M14 8v12" stroke="#6BA3B5" stroke-width="2"/></svg></div>
+              <div class="mark-label">互联网</div><div class="mark-years">13 年</div>
+            </div>
+            <div class="mark" id="chart-waves-m2">
+              <div class="mark-num">02</div>
+              <div class="icon-wrap"><svg viewBox="0 0 28 28" fill="none"><circle cx="9" cy="12" r="4" stroke="#C4A35A" stroke-width="2"/><circle cx="19" cy="12" r="4" stroke="#C4A35A" stroke-width="2"/><path d="M4 22c0-4 3-6 5-6s5 2 5 6M14 22c0-4 3-6 5-6s5 2 5 6" stroke="#C4A35A" stroke-width="2"/></svg></div>
+              <div class="mark-label">社交媒体</div><div class="mark-years">13 年</div>
+            </div>
+            <div class="mark" id="chart-waves-m3">
+              <div class="mark-num">03</div>
+              <div class="icon-wrap"><svg viewBox="0 0 28 28" fill="none"><rect x="6" y="8" width="16" height="14" rx="3" stroke="#8B69B4" stroke-width="2"/><path d="M10 14h8M10 18h5" stroke="#8B69B4" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <div class="mark-label">AI</div><div class="mark-years">13 年</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+var tl = gsap.timeline({ paused: true });
+var fill = document.getElementById('chart-waves-fill');
+var phases = [
+  { pct: 33.33, mark: 'chart-waves-m1', tick: 'chart-waves-tk1', t: 0.15 },
+  { pct: 66.66, mark: 'chart-waves-m2', tick: 'chart-waves-tk2', t: 1.55 },
+  { pct: 100,   mark: 'chart-waves-m3', tick: 'chart-waves-tk3', t: 3.05 }
+];
+gsap.set(fill, { width: '0%' });
+phases.forEach(function (p) {
+  tl.to(fill, { width: p.pct + '%', duration: 0.65, ease: 'power2.out' }, p.t);
+  tl.to('#' + p.mark, { opacity: 1, y: 0, duration: 0.38, ease: 'back.out(3)' }, p.t + 0.08);
+  tl.add(function () {
+    document.getElementById(p.mark).classList.add('on');
+    document.getElementById(p.tick).classList.add('on');
+  }, p.t + 0.1);
+});
+window.__timelines['chart-waves'] = tl;
+</script>
+</template></body></html>

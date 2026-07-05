@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8" /></head><body><template>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  :root {
+    --zone-top: 20%;
+    --card-w: 780px;
+    --stack-h: 500px;
+    --stack-offset: 80px;
+    --slap-from-y: -84px;
+    --slap-from-scale: 1.12;
+    --name-size: 50px;
+    --code-size: 18px;
+    --frame-pad: 42px 40px;
+    --frame-min-h: 240px;
+  }
+  #root { position: absolute; inset: 0; width: 1448px; height: 1086px; background: transparent; overflow: hidden; }
+  .zone {
+    position: absolute; left: 0; right: 0; top: var(--zone-top); height: 50%;
+    display: flex; align-items: flex-start; justify-content: center; padding-top: 2%;
+  }
+  .stack {
+    position: relative; width: var(--card-w); height: var(--stack-h);
+  }
+  .tile {
+    position: absolute; left: 0; right: 0; width: var(--card-w);
+    border-radius: 24px; overflow: hidden; opacity: 0;
+    transform-origin: center bottom;
+    will-change: transform, opacity;
+  }
+  #card-tags-oss-t1 { top: var(--stack-offset); z-index: 1; }
+  #card-tags-oss-t2 { top: 0; z-index: 2; }
+  .frame {
+    background: rgba(252,248,242,0.96); border: 1.5px solid rgba(44,36,32,0.08);
+    box-shadow: 0 20px 48px rgba(44,36,32,0.13); padding: var(--frame-pad); min-height: var(--frame-min-h);
+  }
+  .top { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+  .dot { width: 16px; height: 16px; border-radius: 50%; }
+  #card-tags-oss-t1 .dot { background: #7BA888; box-shadow: 0 0 0 5px rgba(123,168,136,0.2); }
+  #card-tags-oss-t2 .dot { background: #6BA3B5; box-shadow: 0 0 0 5px rgba(107,163,181,0.2); }
+  .code { font: 600 var(--code-size)/1 "JetBrains Mono", "Consolas", monospace; letter-spacing: 0.08em; color: rgba(44,36,32,0.45); }
+  .name { font: 800 var(--name-size)/1.25 "Noto Serif SC", serif; color: #2C2420; }
+  .bar { height: 5px; border-radius: 2px; margin-top: 20px; width: 0; }
+  #card-tags-oss-t1 .bar { background: linear-gradient(90deg, #7BA888, rgba(123,168,136,0.3)); }
+  #card-tags-oss-t2 .bar { background: linear-gradient(90deg, #6BA3B5, rgba(107,163,181,0.3)); }
+</style>
+<div id="root" data-composition-id="card-tags-oss" data-width="1448" data-height="1086" data-start="0" data-duration="4.766">
+  <div class="clip" data-start="0" data-duration="4.766" data-track-index="0">
+    <div class="zone">
+      <div class="stack">
+        <div class="tile" id="card-tags-oss-t1">
+          <div class="frame">
+            <div class="top"><div class="dot"></div><span class="code">agent / game</span></div>
+            <div class="name">AI 自己玩游戏</div>
+            <div class="bar" id="card-tags-oss-b1"></div>
+          </div>
+        </div>
+        <div class="tile" id="card-tags-oss-t2">
+          <div class="frame">
+            <div class="top"><div class="dot"></div><span class="code">copilot / dev</span></div>
+            <div class="name">AI 自动写代码</div>
+            <div class="bar" id="card-tags-oss-b2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+var tl = gsap.timeline({ paused: true });
+
+/* 对齐旁白：89.233s / 90.933s，block 起始于 87.7s */
+var T1 = 1.533;
+var T2 = 3.233;
+
+function slap(cardSel, barSel, at, rot) {
+  gsap.set(cardSel, {
+    opacity: 0,
+    y: -84,
+    scale: 1.12,
+    rotation: rot + 4,
+    transformOrigin: '50% 100%'
+  });
+  tl.to(cardSel, {
+    opacity: 1, y: 0, scale: 1, rotation: rot,
+    duration: 0.26, ease: 'power4.out'
+  }, at);
+  tl.to(cardSel, { scale: 0.975, duration: 0.05, ease: 'power2.in' }, at + 0.26);
+  tl.to(cardSel, { scale: 1, duration: 0.16, ease: 'power2.out' }, at + 0.31);
+  tl.to(barSel, { width: '100%', duration: 0.38, ease: 'power2.out' }, at + 0.14);
+}
+
+slap('#card-tags-oss-t1', '#card-tags-oss-b1', T1, -2);
+slap('#card-tags-oss-t2', '#card-tags-oss-b2', T2, 1.5);
+window.__timelines['card-tags-oss'] = tl;
+</script>
+</template></body></html>

@@ -1,0 +1,114 @@
+# 分镜 Skill component → HF 实现映射
+# 查 block 顺序见 README
+
+version: 1
+
+lookup_priority:
+  - vendor/hyperframes
+  - vendor/ported
+  - blocks
+  - innovation
+
+# 信息类型 → 默认 component（Skill Step 1）
+info_types:
+  结论: { component: HookSequence, tier: B }
+  解释: { component: ConceptMap, tier: B }
+  举例: { component: CaseStudy, tier: B }
+  对比: { component: SignalGrid, tier: B }
+  数据: { component: SignalGrid, tier: A }
+  行动: { component: ActionList, tier: B }
+
+# Skill component → HF 路径（tier: A=block B=overlay C=hold）
+components:
+  HookSequence:
+    tier: B
+    beat_type: line-em
+    notes: 开场钩子，大字 + 可选高亮词
+
+  SourceCard:
+    tier: A
+    block: blocks/book-cover/block.html
+    source_project: HyperFrames/5000天后
+    status: seed
+
+  ConceptMap:
+    tier: B
+    beat_type: mirror
+    alt_beat_types: [emphasis]
+
+  SignalGrid:
+    tier: A
+    variants:
+      - id: signal-sidebar
+        block: blocks/card-signal/block.html
+        when: 信号序号侧栏卡
+        status: todo
+      - id: tags-stack-slap
+        block: blocks/card-stack-slap/block.html
+        when: 列举 issue / 标签，拍入叠卡
+        status: seed
+      - id: tags-bento
+        block: blocks/card-tags-bento/block.html
+        when: 多标签 bento 布局
+        status: todo
+
+  QuoteReveal:
+    tier: B
+    beat_type: stanza
+    block_optional: blocks/card-quote/block.html
+
+  ActionList:
+    tier: B
+    beat_type: steps
+    alt_beat_types: [brackets]
+
+  CaseStudy:
+    tier: B
+    beat_types: [margin, ask]
+
+  ReadingScene:
+    tier: C
+    action: bg_segment_only
+
+  OriginalText:
+    tier: B
+    beat_type: prose
+
+  AnnotationMark:
+    tier: B
+    beat_types: [line-em, strike]
+
+  AuthorProfile:
+    tier: B
+    beat_type: line
+
+  ChapterBreak:
+    tier: C
+    action: bg_segment_only
+
+  ChartTimeline:
+    tier: A
+    block: blocks/chart-timeline-3/block.html
+    when: 多段时长对比时间轴
+    status: seed
+
+  StatCounter:
+    tier: A
+    block: blocks/stat-ring/block.html
+    when: 数字计数 / 圆环
+    status: todo
+
+# 官方 block 快捷索引（安装后填路径）
+vendor_hyperframes:
+  data-chart:
+    install: npx hyperframes add data-chart --dir vendor/hyperframes
+    when: 通用柱状/折线数据图
+  lt-dark-card:
+    install: npx hyperframes add lt-dark-card --dir vendor/hyperframes
+    when: 深色卡片（读书稿需改色）
+
+# 创新：映射表没有时
+innovation:
+  required_fields: [visual_intent, info_type, tier, kind]
+  kind: [new_block, new_beat_type, fork_block]
+  after_approval: 回收到 blocks/ 并更新本文件

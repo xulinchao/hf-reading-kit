@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8" /></head><body><template>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  /* ↓ 调参见 compositions/v2/CONFIG.md */
+  #root {
+    --zone-top: 10%;
+    --book-w: 340px;
+    --book-r: 14px;
+    position: absolute; inset: 0; width: 1448px; height: 1086px;
+    background: transparent; overflow: hidden;
+  }
+  .zone {
+    position: absolute; left: 0; right: 0; top: var(--zone-top); height: 52%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    perspective: 1200px;
+  }
+  .book-wrap {
+    position: relative; width: var(--book-w);
+    transform-style: preserve-3d;
+  }
+  .book-shadow {
+    position: absolute; left: 8%; right: 8%; bottom: -18px; height: 28px;
+    background: rgba(44,36,32,0.22); filter: blur(16px); border-radius: 50%;
+    transform: scaleX(0.4); opacity: 0;
+  }
+  .cover {
+    display: block; width: 100%; height: auto; border-radius: var(--book-r);
+    box-shadow: 0 24px 56px rgba(44,36,32,0.22), 0 4px 12px rgba(44,36,32,0.12);
+    border: 1px solid rgba(255,255,255,0.65);
+  }
+  .spine {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
+    border-radius: var(--book-r) 0 0 var(--book-r);
+    background: linear-gradient(to right, rgba(44,36,32,0.18), transparent);
+    pointer-events: none;
+  }
+  .shine {
+    position: absolute; inset: 0; border-radius: var(--book-r);
+    background: linear-gradient(125deg, rgba(255,255,255,0.42) 0%, transparent 42%, transparent 100%);
+    pointer-events: none; opacity: 0;
+  }
+  .caption {
+    margin-top: 28px; text-align: center; opacity: 0;
+    font: 600 20px/1 "Noto Sans SC", sans-serif; letter-spacing: 0.32em;
+    color: rgba(44,36,32,0.52);
+  }
+  .caption em {
+    font-style: normal; color: #6BA3B5; font-weight: 700;
+  }
+</style>
+<div id="root" data-composition-id="book-cover" data-width="1448" data-height="1086" data-start="0" data-duration="2.034">
+  <div class="clip" data-start="0" data-duration="2.034" data-track-index="0">
+    <div class="zone">
+      <div class="book-wrap" id="book-cover-wrap">
+        <div class="book-shadow" id="book-cover-shadow"></div>
+        <img class="cover" id="book-cover-img" src="public/assets/book-cover.png" alt="5000天后的世界" width="340" height="480" />
+        <div class="spine"></div>
+        <div class="shine" id="book-cover-shine"></div>
+      </div>
+      <div class="caption" id="book-cover-cap"><em>KK</em> · 5000天后的世界</div>
+    </div>
+  </div>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+var tl = gsap.timeline({ paused: true });
+var book = document.getElementById('book-cover-wrap');
+var shadow = document.getElementById('book-cover-shadow');
+var shine = document.getElementById('book-cover-shine');
+var cap = document.getElementById('book-cover-cap');
+
+gsap.set(book, { opacity: 0, scale: 0.72, rotationY: -22, y: 40, transformPerspective: 900 });
+gsap.set(shadow, { scaleX: 0.3, opacity: 0 });
+gsap.set(shine, { opacity: 0, x: -30 });
+gsap.set(cap, { opacity: 0, y: 12 });
+
+tl.to(book, { opacity: 1, scale: 1, rotationY: 8, y: 0, duration: 0.62, ease: 'back.out(2.2)' }, 0.08);
+tl.to(shadow, { scaleX: 1, opacity: 1, duration: 0.45, ease: 'power2.out' }, 0.35);
+tl.to(shine, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' }, 0.42);
+tl.to(book, { rotationY: 0, duration: 0.55, ease: 'power2.inOut' }, 0.55);
+tl.to(cap, { opacity: 1, y: 0, duration: 0.38, ease: 'power2.out' }, 0.75);
+tl.to(book, { y: -5, duration: 0.9, ease: 'sine.inOut', yoyo: true, repeat: 1 }, 1.1);
+
+window.__timelines['book-cover'] = tl;
+</script>
+</template></body></html>
